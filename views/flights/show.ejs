@@ -1,0 +1,89 @@
+<%- include('../partials/header') %>
+
+    <section id="show-page">
+        <div>Airline: </div>
+        <div>
+            <%= flight.airline %>
+        </div>
+        <div>Airport: </div>
+        <div>
+            <%= flight.airport %>
+        </div>
+        <div>Flight No: </div>
+        <div>
+            <%= flight.flightNo %>
+        </div>
+        <div>Departs: </div>
+        <div>
+            <%= flight.departs %>
+        </div>
+
+        <div>Tickets:</div>
+        <ul>
+            <%- flight.ticket.map(function(ticket) { return `<li>${ticket.name} <small>${ticket}</small></li>`;
+                }) %>
+
+        </ul>
+    </section>
+    <form id="add-ticket" action="/flights/<%= flight._id %>/tickets" method="POST">
+        <select name="ticketId">
+            <%- tickets.map(function(ticket) { return `<option value="${ticket.id}">${ticket.name}</option> `
+                }).join('') %>
+        </select>
+        <button type="submit">Add ticket</button>
+    </form>
+    <br><br>
+
+    <h2>Destinations</h2>
+    <form id="add-destination-form" method="POST" action="/flights/<%= flight._id %>/destinations">
+        <label>Destination:</label>
+        <select name="Destination">
+            <option value="AUS">AUS</option>
+            <option value="DFW">DFW</option>
+            <option value="DEN">DEN</option>
+            <option value="LAX">LAX</option>
+            <option value="SAN" selected>SAN</option>
+        </select>
+
+        <label>Arrival:</label>
+        <input type="date">
+
+        <input type="submit" value="Choose destination">
+    </form>
+
+    <% if (flight.destinations.length) { %>
+        <table>
+            <thead>
+                <tr>
+                    <th>Destination</th>
+                    <th>Arrival</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% flight.destinations.forEach(function(destination) { %>
+                    <tr>
+                        <!-- do we need below code snippet for selecting airport arrival destination? -->
+                        <!-- <td>``
+                            <%= destination.createdAt.toLocaleDateString() %>
+                        </td> -->
+                        <td>
+                            <%= destination.airport %>
+                        </td>
+                        <td>
+                            <%= destination.arrival %>
+                        </td>
+                    </tr>
+                    <% }) %>
+                        <!-- <tr>
+                            <td colspan="2"></td>
+                            <td>
+                                <strong><%= ratingAverage %></strong>
+                            </td>
+                        </tr> -->
+            </tbody>
+        </table>
+        <% } else { %>
+            <h5>No Destinations Yet!</h5>
+            <% } %>
+
+                <%- include('../partials/footer') %>
